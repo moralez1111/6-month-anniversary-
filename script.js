@@ -237,3 +237,4 @@ function initScratchCard() {
   canvas.addEventListener('touchend', () => isDrawing = false);
   canvas.addEventListener('touchmove', scratch, { passive: false });
 }
+
