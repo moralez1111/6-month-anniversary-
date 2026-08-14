@@ -485,3 +485,8 @@ body {
     font-size: 0.65rem;
   }
 }
+.secret-letter h3 {
+  color: #6b21a8;
+  margin-bottom: 12px;
+  text-align: center; /* 👈 დაამატე ეს სტრიქონი */
+}
