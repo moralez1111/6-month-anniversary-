@@ -15,7 +15,7 @@ body {
   animation: gradientBG 16s ease infinite;
   color: #2c2035;
   min-height: 100vh;
-  padding: 40px 15px 90px 15px; /* გაზრდილი დაშორება ზემოდან და ქვემოდან */
+  padding: 40px 15px 90px 15px;
   overflow-x: hidden;
   position: relative;
 }
@@ -90,11 +90,11 @@ body {
 }
 
 /* ==========================================
-   3. სათაური და 180 დღის ტაიმერი
+   3. სათაური და ტაიმერი
    ========================================== */
 .header-section {
   text-align: center;
-  margin-bottom: 45px; /* გაზრდილი დაშორება რუკამდე */
+  margin-bottom: 45px;
 }
 
 .header-section h1 {
@@ -107,21 +107,21 @@ body {
 .subtitle {
   color: #7b5294;
   font-size: 1rem;
-  margin-bottom: 25px; /* გაზრდილი დაშორება ტაიმერამდე */
+  margin-bottom: 25px;
 }
 
 .timer-container {
   display: flex;
   justify-content: center;
-  gap: 16px; /* გაზრდილი დაშორება ტაიმერის ბლოკებს შორის */
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .time-box {
   background: rgba(255, 255, 255, 0.85);
-  padding: 16px 20px; /* გაზრდილი შიდა სივრცე */
+  padding: 16px 20px;
   border-radius: 20px;
-  min-width: 85px;
+  min-width: 80px;
   box-shadow: 0 10px 30px rgba(155, 81, 224, 0.1), 0 2px 8px rgba(0, 0, 0, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
@@ -152,7 +152,7 @@ body {
    4. სექციები და ბარათები (Cards)
    ========================================== */
 .section-container {
-  margin-bottom: 45px; /* გაზრდილი დაშორება სექციებს შორის */
+  margin-bottom: 45px;
 }
 
 .section-container h2 {
@@ -166,7 +166,7 @@ body {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(14px);
   border-radius: 24px;
-  padding: 30px 25px; /* გაზრდილი შიდა დაშორება ბარათში */
+  padding: 30px 25px;
   box-shadow: 0 15px 35px rgba(110, 40, 160, 0.07), 0 5px 15px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.95);
 }
@@ -194,10 +194,10 @@ body {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin: 22px 0 15px 0; /* გაზრდილი დაშორებები */
+  margin: 22px 0 15px 0;
 }
 
-.pin-input-group input, .cw-input {
+.pin-input-group input {
   padding: 12px 16px;
   border: 2px solid #e2d4f3;
   border-radius: 14px;
@@ -206,9 +206,10 @@ body {
   text-align: center;
   background: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
+  width: 120px;
 }
 
-.pin-input-group input:focus, .cw-input:focus {
+.pin-input-group input:focus {
   border-color: #9b51e0;
   box-shadow: 0 0 0 4px rgba(155, 81, 224, 0.15);
 }
@@ -259,35 +260,109 @@ body {
 }
 
 /* ==========================================
-   7. კროსვორდი & ფხაჭნის ბარათი
+   7. კროსვორდი (15-სვეტიანი) & ფხაჭნის ბარათი
    ========================================== */
 .crossword-card {
   text-align: center;
-}
-
-.crossword-questions {
-  text-align: left;
-  margin: 25px 0; /* გაზრდილი დაშორება */
-}
-
-.question-item {
-  margin-bottom: 20px; /* კითხვებს შორის დაშორება */
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
 }
 
-.question-item label {
-  font-size: 0.98rem;
-  font-weight: 600;
+/* კროსვორდის ბადე */
+.crossword-grid {
+  display: grid;
+  grid-template-columns: repeat(15, 26px); /* 15 სვეტი */
+  gap: 3px;
+  justify-content: center;
+  margin: 20px auto 30px auto;
+  padding-bottom: 5px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.cw-cell {
+  position: relative;
+  width: 26px;
+  height: 26px;
+}
+
+.cw-cell.empty {
+  visibility: hidden;
+}
+
+.cw-cell .num {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 0.55rem;
+  font-weight: bold;
+  color: #823cd0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cw-box {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid #dcd0ee;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #3b184f;
+  background: #ffffff;
+  outline: none;
+  text-transform: uppercase !important; /* ყოველთვის დიდი ასოები */
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.cw-box:focus {
+  border-color: #9b51e0;
+  box-shadow: 0 0 0 2px rgba(155, 81, 224, 0.25);
+  transform: scale(1.1);
+}
+
+/* კითხვების (Clues) სტილი */
+.crossword-clues {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 35px !important; /* მეტი დაშორება ღილაკამდე */
+  flex-wrap: wrap;
+}
+
+.clue-group {
+  flex: 1;
+  min-width: 220px;
+}
+
+.clue-group h4 {
+  color: #6b21a8;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.clue-group p {
+  font-size: 0.9rem;
   color: #4a2d5e;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
+.crossword-card button {
+  margin-top: 10px;
+}
+
+/* ფხაჭნის ბარათი */
 .voucher-container {
   margin-top: 30px;
   padding-top: 20px;
   border-top: 1px dashed #d5c2e8;
   animation: fadeIn 0.8s ease-in-out;
+  width: 100%;
 }
 
 .voucher-container h3 {
@@ -337,7 +412,7 @@ body {
 }
 
 /* ==========================================
-   8. ანიმაციები & მობილურის ადაპტაცია
+   8. ანიმაციები & მობილურის ადაპტაცია (📱)
    ========================================== */
 @keyframes fadeIn {
   from {
@@ -350,107 +425,63 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+/* ტელეფონების ადაპტაცია */
+@media (max-width: 550px) {
   body {
-    padding: 30px 12px 60px 12px;
+    padding: 25px 10px 60px 10px;
   }
   .header-section h1 {
     font-size: 1.6rem;
   }
   .time-box {
-    min-width: 70px;
-    padding: 12px 14px;
+    min-width: 65px;
+    padding: 10px 12px;
   }
   .time-box span {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
   #map {
-    height: 330px;
+    height: 320px;
   }
   .card {
-    padding: 22px 18px;
+    padding: 20px 14px;
   }
-}
-.crossword-grid {
-  display: grid;
-  grid-template-columns: repeat(14, 26px); /* 14 სვეტი */
-  gap: 3px;
-  justify-content: center;
-  margin: 20px auto 30px auto;
-  overflow-x: auto; /* მობილურზე რომ არ გაფუჭდეს */
-  padding-bottom: 5px;
-}
-
-.cw-cell {
-  position: relative;
-  width: 26px;
-  height: 26px;
-}
-
-.cw-cell.empty {
-  visibility: hidden;
-}
-
-.cw-cell .num {
-  position: absolute;
-  top: 1px;
-  left: 2px;
-  font-size: 0.55rem;
-  font-weight: bold;
-  color: #823cd0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.cw-box {
-  width: 100%;
-  height: 100%;
-  border: 1.5px solid #dcd0ee;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #3b184f;
-  background: #ffffff;
-  outline: none;
-  text-transform: lowercase;
-  padding: 0;
-  transition: all 0.2s ease;
-}
-
-.cw-box:focus {
-  border-color: #9b51e0;
-  box-shadow: 0 0 0 2px rgba(155, 81, 224, 0.25);
-  transform: scale(1.1);
-}
-
-.cw-cell.shared .cw-box {
-  background: #f4ecff;
-}
-
-@media (max-width: 480px) {
+  
+  /* კროსვორდის ზომები ტელეფონზე (15 სვეტი რომ ჩატიოს) */
   .crossword-grid {
-    grid-template-columns: repeat(14, 22px);
+    grid-template-columns: repeat(15, 21px);
     gap: 2px;
   }
   .cw-cell {
-    width: 22px;
-    height: 22px;
+    width: 21px;
+    height: 21px;
   }
   .cw-box {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    border-radius: 4px;
+  }
+  .cw-cell .num {
+    font-size: 0.5rem;
+    left: 1px;
+    top: 0px;
+  }
+  .crossword-clues {
+    flex-direction: column;
+    gap: 15px;
   }
 }
-/* Capitalize letters in input boxes */
-.cw-box {
-  text-transform: uppercase !important;
-}
 
-/* Add more space below clues and above the button */
-.crossword-clues {
-  margin-bottom: 35px !important; /* Increased space before button */
-}
-
-.crossword-card button {
-  margin-top: 10px;
+/* ძალიან პატარა ტელეფონებისთვის (iPhone SE და ა.შ.) */
+@media (max-width: 370px) {
+  .crossword-grid {
+    grid-template-columns: repeat(15, 18px);
+    gap: 1.5px;
+  }
+  .cw-cell {
+    width: 18px;
+    height: 18px;
+  }
+  .cw-box {
+    font-size: 0.65rem;
+  }
 }
