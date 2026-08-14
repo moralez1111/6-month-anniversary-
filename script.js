@@ -1,0 +1,230 @@
+// ==========================================
+// 1. ტაიმერი (15 თებერვლიდან დღემდე)
+// ==========================================
+const startDate = new Date(2026, 1, 15, 0, 0); 
+
+function updateCounter() {
+  const now = new Date();
+  const diff = now - startDate;
+
+  if (diff < 0) return;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  const daysEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+
+  if (daysEl) daysEl.innerText = days;
+  if (hoursEl) hoursEl.innerText = String(hours).padStart(2, '0');
+  if (minutesEl) minutesEl.innerText = String(minutes).padStart(2, '0');
+  if (secondsEl) secondsEl.innerText = String(seconds).padStart(2, '0');
+}
+
+setInterval(updateCounter, 1000);
+updateCounter();
+
+// ==========================================
+// 2. ფონური მფრინავი გულები
+// ==========================================
+const bgHeartsContainer = document.getElementById('bgHearts');
+const heartSymbols = ['❤️', '💖', '💗', '💕', '✨', '🌸', '💜'];
+
+function createAmbientHeart() {
+  if (!bgHeartsContainer) return;
+  const heart = document.createElement('div');
+  heart.className = 'ambient-heart';
+  heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+  heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+  heart.style.pointerEvents = 'none';
+  
+  bgHeartsContainer.appendChild(heart);
+
+  setTimeout(() => { heart.remove(); }, 10000);
+}
+
+setInterval(createAmbientHeart, 800);
+
+// ==========================================
+// 3. ეკრანზე დაჭერისას გულების ეფექტი
+// ==========================================
+window.addEventListener('click', (e) => {
+  if (e.target.closest('#map') || e.target.closest('.leaflet-container')) return;
+
+  for (let i = 0; i < 4; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'click-heart';
+    heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    heart.style.left = e.clientX + 'px';
+    heart.style.top = e.clientY + 'px';
+    heart.style.pointerEvents = 'none';
+    
+    const dx = (Math.random() - 0.5) * 80;
+    heart.style.setProperty('--dx', `${dx}px`);
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => { heart.remove(); }, 1200);
+  }
+});
+
+// ==========================================
+// 4. რუკა & კროსვორდის უჯრების ლოგიკა
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  // --- რუკის ინიციალიზაცია ---
+  const mapElement = document.getElementById('map');
+  
+  if (mapElement) {
+    const map = L.map('map').setView([41.7400, 44.8100], 12);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO'
+    }).addTo(map);
+
+    const purpleHeartIcon = L.divIcon({
+      className: 'purple-heart-pin',
+      html: '<div style="font-size: 2.2rem; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); cursor: pointer;">💜</div>',
+      iconSize: [35, 35],
+      iconAnchor: [17, 17],
+      popupAnchor: [0, -15]
+    });
+
+    const marker1 = L.marker([41.787280, 44.742267], { icon: purpleHeartIcon }).addTo(map);
+    marker1.bindPopup('<b>მირიან მეფის 104 💜</b><br>ჩვენი სპეციალური ადგილი!');
+
+    const marker2 = L.marker([41.692565, 44.869013], { icon: purpleHeartIcon }).addTo(map);
+    marker2.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+
+    const marker3 = L.marker([41.705122, 44.848967], { icon: purpleHeartIcon }).addTo(map);
+    marker3.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+
+    const marker4 = L.marker([41.68913717600892, 44.89677776971187], { icon: purpleHeartIcon }).addTo(map);
+    marker4.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+
+    const marker5 = L.marker([41.718450643566676, 44.74203481510847], { icon: purpleHeartIcon }).addTo(map);
+    marker5.bindPopup('<b>First Date ❤️</b><br>ჩვენი პირველი პაემანი!');
+
+    const marker6 = L.marker([41.690514823870025, 44.85884743962028], { icon: purpleHeartIcon }).addTo(map);
+    marker6.bindPopup('<b>Home Date-ები 🏠💜</b>');
+
+    const marker7 = L.marker([41.6889590471452, 44.92456496946135], { icon: purpleHeartIcon }).addTo(map);
+    marker7.bindPopup('<b>მაკი 🍟💜</b>');
+
+    const group = new L.featureGroup([
+      marker1, marker2, marker3, marker4, marker5, marker6, marker7
+    ]);
+    map.fitBounds(group.getBounds().pad(0.2));
+
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
+  }
+
+  // --- კროსვორდის უჯრების ავტო-გადაყვანა & CAPITAL LETTERS ---
+  const boxes = document.querySelectorAll('.cw-box');
+
+  boxes.forEach((box, index) => {
+    box.addEventListener('input', (e) => {
+      // ჩაწერილი ასო ავტომატურად გადაიყვანოს CAPITAL (დიდ) ასოში
+      e.target.value = e.target.value.toUpperCase();
+
+      if (e.target.value.length === 1) {
+        const nextBox = boxes[index + 1];
+        if (nextBox) nextBox.focus();
+      }
+    });
+
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && index > 0) {
+        boxes[index - 1].focus();
+      }
+    });
+  });
+});
+
+// ==========================================
+// 5. საიდუმლო წერილის გახსნა (Lockbox)
+// ==========================================
+function unlockLetter() {
+  const pinInput = document.getElementById('pinInput').value;
+  const secretLetter = document.getElementById('secretLetter');
+  const pinError = document.getElementById('pinError');
+
+  if (pinInput === '1502') { // 💡 შენი პაროლი
+    secretLetter.style.display = 'block';
+    pinError.style.display = 'none';
+  } else {
+    pinError.style.display = 'block';
+  }
+}
+
+// ==========================================
+// 6. კროსვორდის შემოწმება & ფხაჭნის ბარათი
+// ==========================================
+function checkCrossword() {
+  const boxes = document.querySelectorAll('.cw-box');
+  let allCorrect = true;
+
+  boxes.forEach(box => {
+    const correctLetter = box.getAttribute('data-letter').trim().toUpperCase();
+    const userLetter = box.value.trim().toUpperCase();
+
+    if (userLetter === correctLetter) {
+      box.style.borderColor = '#2ecc71';
+      box.style.backgroundColor = '#e8f8f0';
+    } else {
+      box.style.borderColor = '#e74c3c';
+      box.style.backgroundColor = '#fdeaea';
+      allCorrect = false;
+    }
+  });
+
+  if (allCorrect) {
+    const voucherContainer = document.getElementById('voucherContainer');
+    voucherContainer.style.display = 'block';
+    initScratchCard();
+  }
+}
+
+function initScratchCard() {
+  const canvas = document.getElementById('scratchCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#c8b6e2';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#6b4c9a';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✨ Scratch Here ✨', canvas.width / 2, canvas.height / 2 + 5);
+
+  let isDrawing = false;
+
+  function scratch(e) {
+    if (!isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, 18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  canvas.addEventListener('mousedown', () => isDrawing = true);
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mousemove', scratch);
+
+  canvas.addEventListener('touchstart', () => isDrawing = true);
+  canvas.addEventListener('touchend', () => isDrawing = false);
+  canvas.addEventListener('touchmove', scratch);
+}

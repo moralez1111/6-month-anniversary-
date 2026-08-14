@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ჩვენი ისტორია 💜</title>
+  
+  <!-- Leaflet CSS (რუკის სტილები) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- შენი CSS ფაილი -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 🌸 ფონური მფრინავი გულების კონტეინერი -->
+  <div id="bgHearts"></div>
+
+  <div class="main-container">
+
+    <!-- ========================================== -->
+    <!-- 1. სათაური და 180 დღის ტაიმერი -->
+    <!-- ========================================== -->
+    <header class="header-section">
+      <h1>ჩვენი სპეციალური დღეები 💜</h1>
+      <p class="subtitle">15 თებერვლიდან დღემდე...</p>
+      
+      <div class="timer-container">
+        <div class="time-box">
+          <span id="days">0</span>
+          <p>დღე</p>
+        </div>
+        <div class="time-box">
+          <span id="hours">00</span>
+          <p>საათი</p>
+        </div>
+        <div class="time-box">
+          <span id="minutes">00</span>
+          <p>წუთი</p>
+        </div>
+        <div class="time-box">
+          <span id="seconds">00</span>
+          <p>წამი</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. შავ-თეთრი რუკა -->
+    <!-- ========================================== -->
+    <section class="section-container">
+      <h2>🗺️ ჩვენი მოგონებების რუკა</h2>
+      <div id="map"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. საიდუმლო წერილი (Lockbox) -->
+    <!-- ========================================== -->
+    <section class="section-container">
+      <h2>🔒 საიდუმლო წერილი</h2>
+      <div class="card lockbox-card" id="lockboxCard">
+        <p>შეიყვანე ჩვენი სპეციალური კოდი (მაგ: 1502):</p>
+        <div class="pin-input-group">
+          <input type="password" id="pinInput" maxlength="4" placeholder="****" />
+          <button onclick="unlockLetter()">გახსნა 💖</button>
+        </div>
+        <p id="pinError" class="error-msg" style="display: none;">არასწორი კოდია, სცადე კიდევ! 🙈</p>
+        
+        <!-- წერილი, რომელიც თავიდან დამალულია -->
+        <div id="secretLetter" class="secret-letter" style="display: none;">
+          <hr>
+          <h3>ჩემო საყვარელო ✨</h3>
+          <p>
+            აქ შეგიძლია ჩაწორო შენი გულწრფელი და თბილი წერილი... <br>
+            ყოველი დღე შენთან ერთად განსაკუთრებულია. მადლობა, რომ არსებობ! 💜
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. ნამდვილი კროსვორდი + ფხაჭნის ბარათი -->
+    <!-- ========================================== -->
+    <section class="section-container">
+      <h2>🧩 Our Memory Crossword</h2>
+      <div class="card crossword-card">
+        <p class="cw-instruction">Fill in the grid with the correct answers:</p>
+        
+        <!-- კროსვორდის ბადე (14 სვეტი x 12 სტრიქონი) -->
+        <div class="crossword-grid">
+          <!-- Row 0 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><span class="num">1</span><input type="text" maxlength="1" data-letter="b" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 1 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="a" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 2 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 3 -->
+          <div class="cw-cell empty"></div><div class="cw-cell"><span class="num">2</span><input type="text" maxlength="1" data-letter="s" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="b" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 4 -->
+          <div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="c" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="a" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 5 -->
+          <div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><span class="num">3</span><input type="text" maxlength="1" data-letter="f" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 6 -->
+          <div class="cw-cell"><span class="num">4</span><input type="text" maxlength="1" data-letter="z" class="cw-box"></div>
+          <div class="cw-cell shared"><input type="text" maxlength="1" data-letter="e" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="p" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="i" class="cw-box"></div>
+          <div class="cw-cell shared"><input type="text" maxlength="1" data-letter="o" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="i" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="t" class="cw-box"></div>
+          <div class="cw-cell shared"><input type="text" maxlength="1" data-letter="e" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="t" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="u" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="l" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="i" class="cw-box"></div>
+
+          <!-- Row 7 -->
+          <div class="cw-cell empty"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="a" class="cw-box"></div>
+          <div class="cw-cell empty"></div>
+          <div class="cw-cell"><span class="num">5</span><input type="text" maxlength="1" data-letter="b" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="u" class="cw-box"></div>
+          <div class="cw-cell shared"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="g" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="e" class="cw-box"></div>
+          <div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div>
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 8 -->
+          <div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="m" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="e" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 9 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="v" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 10 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="e" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+
+          <!-- Row 11 -->
+          <div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell"><input type="text" maxlength="1" data-letter="r" class="cw-box"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div><div class="cw-cell empty"></div>
+        </div>
+
+        <!-- კითხვები / Clues -->
+        <div class="crossword-clues">
+          <div class="clue-group">
+            <h4>➡️ Across:</h4>
+            <p><b>4.</b> What was the first nickname I came up with for you?</p>
+            <p><b>5.</b> Which dish are we best at cooking together?</p>
+          </div>
+          <div class="clue-group">
+            <h4>⬇️ Down:</h4>
+            <p><b>1.</b> The most beautiful, cute, smart, and sexy girl on the planet, whom I love the most?</p>
+            <p><b>2.</b> Which movie did we go to the cinema to watch together?</p>
+            <p><b>3.</b> How long are we going to be together?</p>
+          </div>
+        </div>
+
+        <button onclick="checkCrossword()">Check Answers ✨</button>
+
+        <!-- ფხაჭნის ბარათი -->
+        <div id="voucherContainer" class="voucher-container" style="display: none;">
+          <h3>🎉 Congratulations! Here is your gift:</h3>
+          <p>Scratch to reveal your voucher 👇</p>
+          
+          <div class="scratch-card-wrapper">
+            <div class="voucher-reward">
+              🎟️ <b>Voucher for 1x Special Dinner</b><br>
+              <small>Anytime & Anywhere! 🍔💜</small>
+            </div>
+            <canvas id="scratchCanvas" width="300" height="120"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Leaflet JS (რუკის ფუნქციონალი) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- შენი JavaScript ფაილი -->
+  <script src="script.js"></script>
+</body>
+</html>
