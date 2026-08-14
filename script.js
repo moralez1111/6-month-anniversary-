@@ -32,7 +32,7 @@ updateCounter();
 // 2. ფონური მფრინავი გულები
 // ==========================================
 const bgHeartsContainer = document.getElementById('bgHearts');
-const heartSymbols = ['❤️', '💖', '💗', '💕', '✨', '🌸', '💜'];
+const heartSymbols = ['❤️','💘', '💖', '💗', '💕', '✨', '🌸', '💜'];
 
 function createAmbientHeart() {
   if (!bgHeartsContainer) return;
@@ -97,25 +97,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const marker1 = L.marker([41.787280, 44.742267], { icon: purpleHeartIcon }).addTo(map);
-    marker1.bindPopup('<b>მირიან მეფის 104 💜</b><br>ჩვენი სპეციალური ადგილი!');
+    marker1.bindPopup('<b>First Kiss💋 And First "I Love You"💗</b><br>Nikos Home');
 
     const marker2 = L.marker([41.692565, 44.869013], { icon: purpleHeartIcon }).addTo(map);
-    marker2.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+    marker2.bindPopup('<b>Our First Hug🫂</b><br>The Bench in Varketili');
 
     const marker3 = L.marker([41.705122, 44.848967], { icon: purpleHeartIcon }).addTo(map);
-    marker3.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+    marker3.bindPopup('<b>Eating Snow❄️, Getting To Know Each Other💫, And Your First "I Love You"💘</b><br>Vazisubani Park');
 
     const marker4 = L.marker([41.68913717600892, 44.89677776971187], { icon: purpleHeartIcon }).addTo(map);
-    marker4.bindPopup('<b>სპეციალური ადგილი 💜</b>');
+    marker4.bindPopup('<b>Our First Ever Hangout👫</b><br>East Point');
 
     const marker5 = L.marker([41.718450643566676, 44.74203481510847], { icon: purpleHeartIcon }).addTo(map);
-    marker5.bindPopup('<b>First Date ❤️</b><br>ჩვენი პირველი პაემანი!');
+    marker5.bindPopup('<b>Our First Date⛸️🍟</b><br>We went ice skating and then to McDonalds');
 
     const marker6 = L.marker([41.690514823870025, 44.85884743962028], { icon: purpleHeartIcon }).addTo(map);
-    marker6.bindPopup('<b>Home Date-ები 🏠💜</b>');
+    marker6.bindPopup('<b>We Did a Lot of Stuff Here🏠💜</b><br>Our Home Date Spot');
 
     const marker7 = L.marker([41.6889590471452, 44.92456496946135], { icon: purpleHeartIcon }).addTo(map);
-    marker7.bindPopup('<b>მაკი 🍟💜</b>');
+    marker7.bindPopup('<b>We Often Hangout Here🍟</b><br>McDonald');
 
     const group = new L.featureGroup([
       marker1, marker2, marker3, marker4, marker5, marker6, marker7
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- კროსვორდის უჯრების ავტო-გადაყვანა & CAPITAL LETTERS ---
-  const boxes = document.querySelectorAll('.cw-box');
+  const boxes = Array.from(document.querySelectorAll('.cw-box'));
 
   boxes.forEach((box, index) => {
     box.addEventListener('input', (e) => {
@@ -157,7 +157,7 @@ function unlockLetter() {
   const secretLetter = document.getElementById('secretLetter');
   const pinError = document.getElementById('pinError');
 
-  if (pinInput === '1502') { // 💡 შენი პაროლი
+  if (pinInput === '1602') { // 💡 შენი პაროლი
     secretLetter.style.display = 'block';
     pinError.style.display = 'none';
   } else {
@@ -210,9 +210,18 @@ function initScratchCard() {
 
   function scratch(e) {
     if (!isDrawing) return;
+    
+    // მობილურზე ფხაჭნისას გვერდი რომ არ ჩამოჰყვეს
+    if (e.type.startsWith('touch')) {
+      e.preventDefault();
+    }
+
     const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
@@ -224,7 +233,7 @@ function initScratchCard() {
   canvas.addEventListener('mouseup', () => isDrawing = false);
   canvas.addEventListener('mousemove', scratch);
 
-  canvas.addEventListener('touchstart', () => isDrawing = true);
+  canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: false });
   canvas.addEventListener('touchend', () => isDrawing = false);
-  canvas.addEventListener('touchmove', scratch);
+  canvas.addEventListener('touchmove', scratch, { passive: false });
 }
