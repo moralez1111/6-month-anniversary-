@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   boxes.forEach((box, index) => {
     box.addEventListener('input', (e) => {
-      // ჩაწერილი ასო ავტომატურად გადაიყვანოს CAPITAL (დიდ) ასოში
       e.target.value = e.target.value.toUpperCase();
 
       if (e.target.value.length === 1) {
@@ -157,7 +156,7 @@ function unlockLetter() {
   const secretLetter = document.getElementById('secretLetter');
   const pinError = document.getElementById('pinError');
 
-  if (pinInput === '1602') { // 💡 შენი პაროლი
+  if (pinInput === '1602') {
     secretLetter.style.display = 'block';
     pinError.style.display = 'none';
   } else {
@@ -198,20 +197,25 @@ function initScratchCard() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
+  // 💡 ტილოს შიდა რეზოლუციის დაყენება 380x180-ზე
+  canvas.width = 380;
+  canvas.height = 180;
+
+  // ზედაპირის შეღებვა
   ctx.fillStyle = '#c8b6e2';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // ტექსტი ზედაპირზე
   ctx.fillStyle = '#6b4c9a';
-  ctx.font = 'bold 15px sans-serif';
+  ctx.font = 'bold 16px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('✨ Scratch Here ✨', canvas.width / 2, canvas.height / 2 + 5);
+  ctx.fillText('✨ Scratch Here ✨', canvas.width / 2, canvas.height / 2 + 6);
 
   let isDrawing = false;
 
   function scratch(e) {
     if (!isDrawing) return;
     
-    // მობილურზე ფხაჭნისას გვერდი რომ არ ჩამოჰყვეს
     if (e.type.startsWith('touch')) {
       e.preventDefault();
     }
@@ -220,21 +224,26 @@ function initScratchCard() {
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+    // 💡 კოორდინატების სწორი მასშტაბირება მობილურისთვის და პატარა ეკრანებისთვის
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(x, y, 18, 0, Math.PI * 2);
+    ctx.arc(x, y, 22, 0, Math.PI * 2); // გადაჩხაპნის რადიუსი
     ctx.fill();
   }
 
   canvas.addEventListener('mousedown', () => isDrawing = true);
   canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseleave', () => isDrawing = false);
   canvas.addEventListener('mousemove', scratch);
 
   canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: false });
   canvas.addEventListener('touchend', () => isDrawing = false);
+  canvas.addEventListener('touchcancel', () => isDrawing = false);
   canvas.addEventListener('touchmove', scratch, { passive: false });
 }
-
