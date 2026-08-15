@@ -492,11 +492,21 @@ body {
 }
 .scratch-card-wrapper {
   position: relative;
-  width: 380px;
+  width: 380px !important;
   max-width: 95%;
-  height: 180px;
+  height: 180px !important;
   margin: 22px auto 10px auto;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+#scratchCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 380px !important;
+  height: 180px !important;
+  cursor: pointer;
+  touch-action: none;
 }
