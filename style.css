@@ -490,3 +490,13 @@ body {
   margin-bottom: 12px;
   text-align: center; /* 👈 დაამატე ეს სტრიქონი */
 }
+.scratch-card-wrapper {
+  position: relative;
+  width: 380px;
+  max-width: 95%;
+  height: 180px;
+  margin: 22px auto 10px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
